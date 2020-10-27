@@ -1,6 +1,7 @@
 class MenuItemsController < ApplicationController
   # skip_before_action :verify_authenticity_token
   #protecing user data authenticty token, rails generates this specifically
+  before_action :authenticate_user!, except: [:index]
   before_action :set_item, only: [:show, :update, :edit, :destroy]
   #only want this set item method to run before these actions becuase theya re the only ones who need the instance variable
   def index
