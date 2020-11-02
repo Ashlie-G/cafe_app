@@ -1,9 +1,10 @@
 class MenuItemsController < ApplicationController
-  # skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token, only: [:buy]
   #protecing user data authenticty token, rails generates this specifically
-  before_action :authenticate_user!
-  before_action :check_roles
-  before_action :set_item, only: [:show, :update, :edit, :destroy]
+  before_action :authenticate_user!, except: [:buy]
+  before_action :check_roles, except: [:buy]
+  before_action :set_item, only: [:show, :update, :edit, :destroy, :buy]
+ 
   #only want this set item method to run before these actions becuase theya re the only ones who need the instance variable
   def index
    @items = MenuItem.order(:tiem)
@@ -22,6 +23,7 @@ class MenuItemsController < ApplicationController
 
   def new
     @item = MenuItem.new
+    #@menu = Menu.new
 
   end
 
@@ -42,10 +44,43 @@ class MenuItemsController < ApplicationController
     redirect_to menu_items_path
   end
 
+  def buy
+    Stripe.api_key = ENV['STRIPE_API_KEY']
+    session = Stripe::Checkout::Session.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      success_url: success_url(params[:id]),
+      cancel_url: cancel_url(params[:id]),
+      line_items: [
+        {
+          price_data: {
+            currency: 'aud',
+            product_data: {
+              name: @item.tiem
+            },
+            unit_amount: (@item.price.to_f * 100).to_i
+          },
+          quantity: 1
+        }
+      ]
+
+    })
+     
+    render json: session
+  end
+
+  def success
+    render plain: 'Success!'
+  end
+
+  def cancel
+    render plain: "The transcation was cancelled!"
+  end
+
   private
 
   def set_item
-    @menus = Menu.all
+    # @menus = Menu.all
     @item = MenuItem.find(params[:id])
   end
 
@@ -57,7 +92,7 @@ class MenuItemsController < ApplicationController
   end
 
   def menu_item_params
-    params.require(:menu_item).permit(:tiem, :price, :quality, menu_ids: [])
+    params.require(:menu_item).permit(:tiem, :price, :quality, :image, menu_ids: [])
   end
 
 

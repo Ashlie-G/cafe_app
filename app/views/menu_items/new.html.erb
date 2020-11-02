@@ -1,36 +1,7 @@
 <h1>Create New Menu Item</h1>
-<!-- ALSO ADD THE PARTIAL HERE -->
-<!-- <%= render 'form' %> -->
 
-<!-- <form action='<%= menu_items_path %>' method ='POST'> -->
-    <%= form_with model: @item, local: true do |f| %>
-    <!-- <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"> -->
-<div>
-    <!-- <label for='item'>Item</label> -->
-    <%= f.label :item %>
-    <!-- <input type ='text' id ='item' name ='tiem'> -->
-    <%= f.text_field :tiem, value: "'Latte'" %>
-</div>
-<br>
-<div>
-    <%= f.label :price %>
-    <%= f.number_field :price, step: 0.10, min: 1 %>
-    <!-- <label for='price'>Price</label>
-    <input type ='number' step='0.01' id ='price' name ='price'> -->
-</div>
-<br>
-<div>
-    <%= f.label :qty %>
-    <%= f.number_field :quality, min: 1 %>
-    <!-- <label for='qty'>Qty</label>
-    <input type ='number' id ='qty' name ='quality'> -->
-</div>
-<br>
-<div>
-    <%= f.submit %>
-</div>
-<!-- </form> -->
-<% end %>
+
+<%= render 'form' %>
 
 
 <div>

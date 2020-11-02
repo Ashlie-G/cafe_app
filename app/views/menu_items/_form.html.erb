@@ -15,10 +15,15 @@
 </div>
 <br>
 <div>
+    <%= f.label :image %>
+    <%= f.file_field :image %>
+</div>
+<div>
     <%= f.label :menus %>
     <%= f.collection_check_boxes :menu_ids, @menus, :id, :title  %>
-    </div>
+    
 <div>
+
 <%= f.submit %>
 </div>
 <% end %>
