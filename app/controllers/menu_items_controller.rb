@@ -4,6 +4,7 @@ class MenuItemsController < ApplicationController
   before_action :authenticate_user!, except: [:buy]
   before_action :check_roles, except: [:buy]
   before_action :set_item, only: [:show, :update, :edit, :destroy, :buy]
+  before_action :set_menus, only: [:show, :update, :edit, :new]
  
   #only want this set item method to run before these actions becuase theya re the only ones who need the instance variable
   def index
@@ -78,9 +79,10 @@ class MenuItemsController < ApplicationController
   end
 
   private
-
+def set_menus
+  @menus = Menu.all
+end
   def set_item
-    # @menus = Menu.all
     @item = MenuItem.find(params[:id])
   end
 
